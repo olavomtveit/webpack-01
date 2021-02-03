@@ -1,10 +1,24 @@
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-    entry: './src/index.ts',
+    entry: './src/index.tsx',
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')
+    },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin(),
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+            filename: './index.html'
+        })
+    ],
+    devServer: {
+        contentBase: path.resolve(__dirname, './build'),
+        hot: true,
+        port: 9000
     },
     module: {
         rules: [{
@@ -20,13 +34,12 @@ module.exports = {
             },
             {
                 test: /\.tsx?$/,
-                use: 'ts-loader',
+                use: 'babel-loader',
                 exclude: /node_modules/,
             }
         ],
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
+        extensions: ['.tsx', '.jsx', '.js' ,'.ts'],
     },
-    watch: true,
 };
